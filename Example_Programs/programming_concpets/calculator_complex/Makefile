@@ -4,7 +4,6 @@ TEST_PROJ_NAME = Test_$(PROJ_NAME)
 BUILD_DIR = Build
 
 SRC = src/complex_calculator.c
-
 TEST_SRC = test/test_complex_calculator.c\
 unity/unity.c
 
@@ -28,7 +27,7 @@ endif
 .PHONY : all test coverage run clean doc
 
 all:$(BUILD_DIR)
-	gcc main.c $(SRC) $(INC) -o $(call FixPath,$(BUILD_DIR)/$(PROJ_NAME).$(EXEC))
+	gcc main.c $(SRC) $(INC)  -o $(call FixPath,$(BUILD_DIR)/$(PROJ_NAME).$(EXEC))
 
 run: all
 	$(call FixPath,$(BUILD_DIR)/$(PROJ_NAME).$(EXEC))
@@ -38,16 +37,21 @@ test: $(SRC) $(TEST_SRC)
 	$(call FixPath,$(BUILD_DIR)/$(TEST_PROJ_NAME).$(EXEC))
 
 coverage:${PROJECT_NAME}
-	gcc -fprofile-arcs -ftest-coverage $(SRC) $(INC) -o $(call FixPath,$(BUILD_DIR)/$(TEST_PROJ_NAME).$(EXEC))
-	$(call FixPath,$(BUILD_DIR)/$(TEST_PROJ_NAME).$(EXEC))
-	gcov -a $(SRC)
+	gcc -fprofile-arcs -ftest-coverage  $(INC) $(TEST_SRC) $(SRC)
+	./a.exe
 
 doc:
-	make -C doc
+	make doc -C doc
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
 
 clean:
 	$(RM) $(call FixPath,$(BUILD_DIR)/*)
 	make clean -C doc
-	rmdir $(BUILD_DIR) doc/html
+	rmdir $(BUILD_DIR) doc/html*
+cld:
+	$(RM) *.gcno *.gcda *.c.gcov
+git:
+	git add .
+	git commit -m "push"
+	git push -u origin master
