@@ -48,10 +48,13 @@ $(BUILD_DIR):
 clean:
 	$(RM) $(call FixPath,$(BUILD_DIR)/*)
 	make clean -C doc
-	rmdir $(BUILD_DIR) doc/html*
+	rmdir $(BUILD_DIR) doc/html
 cld:
 	$(RM) *.gcno *.gcda *.c.gcov
 git:
 	git add .
 	git commit -m "push"
 	git push -u origin master
+sa: $(SRC) $(TEST)
+	gcc   $(INC) $(TEST_SRC) $(SRC) -o $(TEST_PROJ_NAME).$(EXEC) -fsanitize=address  -g
+	
